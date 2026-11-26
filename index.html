@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Master Method Analyzer — DAA Project, SRM University-AP</title>
+    <meta name="description" content="A working tool for classifying divide-and-conquer recurrences with the Master Theorem: lab, recursion tree, worked examples, failure cases and real-world scenarios." />
+    <link rel="stylesheet" href="css/styles.css" />
+  </head>
+  <body>
+    <div class="site">
+      <header class="masthead">
+        <div class="masthead-top">
+          <div>
+            <p class="eyebrow">Design and Analysis of Algorithms · Sec-Q AIML</p>
+            <h1>Master Method Analyzer</h1>
+            <p class="sub">A working tool for classifying divide-and-conquer recurrences.</p>
+          </div>
+          <div class="masthead-meta">
+            <p>SRM University-AP</p>
+            <p>Group 6</p>
+            <p>N Nihar Ranjan Pradhan</p>
+          </div>
+        </div>
+        <nav class="nav" aria-label="Sections">
+          <button class="tab-btn active" data-tab="lab">Lab</button>
+          <button class="tab-btn" data-tab="tree">Recursion tree</button>
+          <button class="tab-btn" data-tab="examples">Worked examples</button>
+          <button class="tab-btn" data-tab="fails">Where it fails</button>
+          <button class="tab-btn" data-tab="scenarios">Applications</button>
+          <button class="tab-btn" data-tab="code">Code</button>
+          <button class="tab-btn" data-tab="team">Team &amp; viva</button>
+        </nav>
+      </header>
+
+      <section class="problem">
+        <p class="label">Problem statement</p>
+        <blockquote>
+          Use the Master Method to analyze the time complexity of recursive algorithms
+          (e.g., the Merge Sort algorithm). Provide examples where the Master Theorem
+          applies and discuss cases where it does not. Write down the real time
+          Scenarios where this problem statement can be applicable.
+        </blockquote>
+      </section>
+
+      <main>
+        
+        <section id="tab-lab" class="tab-content">
+          <h2><span class="num">01</span> Master Method Lab</h2>
+          <p class="lede">Enter the parameters of a recurrence and read off the case, the asymptotic bound and the reasoning.</p>
+
+          <div class="theorem">
+            <p class="formula">T(n) = a · T(n / b) + f(n) &nbsp;&nbsp; a ≥ 1, b &gt; 1, &nbsp; f(n) = Θ(n<sup>p</sup> · log<sup>k</sup> n)</p>
+            <table class="mini-table">
+              <thead><tr><th>Case</th><th>Condition</th><th>Bound</th><th>Reading</th></tr></thead>
+              <tbody>
+                <tr><td>1</td><td>p &lt; log<sub>b</sub> a</td><td>Θ(n<sup>log_b a</sup>)</td><td>leaves dominate</td></tr>
+                <tr><td>2</td><td>p = log<sub>b</sub> a</td><td>Θ(n<sup>log_b a</sup> log n)</td><td>levels balanced</td></tr>
+                <tr><td>2*</td><td>p = log<sub>b</sub> a, k ≥ 0</td><td>Θ(n<sup>log_b a</sup> log<sup>k+1</sup> n)</td><td>generalized form</td></tr>
+                <tr><td>3</td><td>p &gt; log<sub>b</sub> a + regularity</td><td>Θ(f(n))</td><td>root dominates</td></tr>
+              </tbody>
+            </table>
+            <p class="fine">The plain CLRS theorem requires f(n) = Θ(n<sup>c</sup>) exactly. The generalized row is used when a log<sup>k</sup> factor is present.</p>
+          </div>
+
+          <div class="two-col">
+            <div class="form">
+              <p class="label">Recurrence</p>
+              <div id="lab-recurrence-preview" class="preview">T(n) = 2 T(n/2) + n · 1</div>
+              <div class="fields">
+                <div class="field"><label for="lab-a">a — subproblems</label><input id="lab-a" type="number" min="1" max="64" step="1" value="2" /></div>
+                <div class="field"><label for="lab-b">b — shrink factor</label><input id="lab-b" type="number" min="2" max="16" step="1" value="2" /></div>
+                <div class="field"><label for="lab-p">p — power of n</label><input id="lab-p" type="number" min="0" max="8" step="0.1" value="1" /></div>
+                <div class="field"><label for="lab-k">k — log exponent</label><input id="lab-k" type="number" min="0" max="6" step="1" value="0" /></div>
+                <div class="field"><label for="lab-n">n — tree size</label><input id="lab-n" type="number" min="8" max="4096" step="1" value="64" /></div>
+              </div>
+              <div class="form-actions"><button id="lab-analyze-btn" class="btn">Analyze</button></div>
+              <p class="label">Presets</p>
+              <div class="presets">
+                <button class="preset" data-a="2" data-b="2" data-p="1" data-k="0">Merge sort</button>
+                <button class="preset" data-a="1" data-b="2" data-p="0" data-k="0">Binary search</button>
+                <button class="preset" data-a="3" data-b="2" data-p="1" data-k="0">Karatsuba</button>
+                <button class="preset" data-a="2" data-b="2" data-p="2" data-k="0">Case 3</button>
+                <button class="preset" data-a="4" data-b="2" data-p="2" data-k="1">Generalized</button>
+              </div>
+            </div>
+            <div id="lab-result" class="output">
+              <p class="placeholder">Set the parameters and press Analyze.</p>
+            </div>
+          </div>
+        </section>
+
+        
+        <section id="tab-tree" class="tab-content hidden">
+          <h2><span class="num">02</span> Recursion Tree</h2>
+          <p class="lede">Work at level i is a<sup>i</sup> · f(n / b<sup>i</sup>). The table and chart show which part of the tree carries the cost.</p>
+
+          <div class="tree-controls">
+            <div class="fields five">
+              <div class="field"><label for="tree-a">a</label><input id="tree-a" type="number" min="1" step="1" value="2" /></div>
+              <div class="field"><label for="tree-b">b</label><input id="tree-b" type="number" min="2" step="1" value="2" /></div>
+              <div class="field"><label for="tree-n">n</label><input id="tree-n" type="number" min="8" max="4096" value="64" /></div>
+              <div class="field"><label for="tree-p">p</label><input id="tree-p" type="number" min="0" step="0.1" value="1" /></div>
+              <div class="field"><label for="tree-k">k</label><input id="tree-k" type="number" min="0" step="1" value="0" /></div>
+            </div>
+            <div class="form-actions">
+              <button id="tree-build-btn" class="btn">Build tree</button>
+              <button id="tree-load-lab" class="btn secondary">Use lab values</button>
+              <span id="tree-dominance" class="dominance"></span>
+            </div>
+          </div>
+
+          <div class="two-col">
+            <div>
+              <h3>Tree, first levels</h3>
+              <div id="tree-canvas" class="tree-canvas">
+                <p class="placeholder">Press Build tree.</p>
+              </div>
+            </div>
+            <div>
+              <h3>Work per level</h3>
+              <div class="chart-box"><canvas id="tree-work-chart"></canvas></div>
+            </div>
+          </div>
+
+          <h3>Level-by-level work</h3>
+          <div class="table-wrap">
+            <table class="data-table">
+              <thead><tr><th>Level i</th><th>Subproblems a<sup>i</sup></th><th>Size n / b<sup>i</sup></th><th>Work / node</th><th>Level total</th></tr></thead>
+              <tbody id="tree-table-body"><tr><td colspan="5" class="placeholder">No data yet.</td></tr></tbody>
+            </table>
+          </div>
+        </section>
+
+        
+        <section id="tab-examples" class="tab-content hidden">
+          <h2><span class="num">03</span> Worked Examples</h2>
+          <p class="lede">Recurrences that satisfy the theorem. Select one to open its full derivation in the lab.</p>
+          <div id="examples-grid" class="doc-list"></div>
+        </section>
+
+        
+        <section id="tab-fails" class="tab-content hidden">
+          <h2><span class="num">04</span> Where It Fails</h2>
+          <p class="lede">The theorem needs constant a, constant b &gt; 1, equally sized subproblems and a positive toll. These recurrences break one of those conditions.</p>
+          <p class="fine">Checklist: non-constant a · unequal splits · n − c instead of n / b · sub-polynomial gap · oscillating toll · log factors outside k ≥ 0.</p>
+          <div id="fails-grid" class="doc-list"></div>
+        </section>
+
+        
+        <section id="tab-scenarios" class="tab-content hidden">
+          <h2><span class="num">05</span> Real-Time Scenarios</h2>
+          <p class="lede">Where this analysis is used to make an engineering decision.</p>
+          <div id="scenarios-grid" class="doc-list"></div>
+        </section>
+
+        
+        <section id="tab-code" class="tab-content hidden">
+          <h2><span class="num">06</span> Reference Implementations</h2>
+          <p class="lede">A classifier and a Merge Sort implementation in three languages.</p>
+          <div class="code-tabs">
+            <button class="code-lang-btn active" data-lang="python">Python</button>
+            <button class="code-lang-btn" data-lang="cpp">C++</button>
+            <button class="code-lang-btn" data-lang="java">Java</button>
+          </div>
+          <div class="two-col">
+            <div>
+              <div class="code-head"><h3>Classifier</h3><button class="copy-btn" data-copy-target="code-display-solver">Copy</button></div>
+              <pre><code id="code-display-solver">// Loading…</code></pre>
+            </div>
+            <div>
+              <div class="code-head"><h3>Merge sort</h3><button class="copy-btn" data-copy-target="code-display-algo">Copy</button></div>
+              <pre><code id="code-display-algo">// Loading…</code></pre>
+            </div>
+          </div>
+        </section>
+
+        
+        <section id="tab-team" class="tab-content hidden">
+          <h2><span class="num">07</span> Team &amp; Viva</h2>
+          <p class="lede">Group 6, Sec-Q AIML, SRM University-AP. Faculty guide: N Nihar Ranjan Pradhan.</p>
+
+          <table class="mini-table team-table">
+            <thead><tr><th>Name</th><th>Roll number</th><th>Email</th><th>Contribution</th></tr></thead>
+            <tbody>
+              <tr><td>K. Niharika</td><td>AP25110070345</td><td>niharika_kantipudi@srmap.edu.in</td><td>Lead, frontend and visualizer</td></tr>
+              <tr><td>N. Likhita</td><td>AP25110070522</td><td>likhita_narla@srmap.edu.in</td><td>Empirical analysis and testing</td></tr>
+              <tr><td>J. Vaishnavi</td><td>AP25110070509</td><td>Vaishnavi_jarugula@srmap.edu.in</td><td>Theory and recurrence proofs</td></tr>
+              <tr><td>A. Varshini</td><td>AP25110070572</td><td>varshini_adapa@srmap.edu.in</td><td>Real-world scenarios and documentation</td></tr>
+            </tbody>
+          </table>
+
+          <h3>Viva questions</h3>
+          <div class="qa">
+            <details><summary>State the three cases of the Master Theorem.</summary><p>Let c = log<sub>b</sub> a. Case 1: f(n) = O(n<sup>c−ε</sup>) → Θ(n<sup>c</sup>). Case 2: f(n) = Θ(n<sup>c</sup>) → Θ(n<sup>c</sup> log n). Case 3: f(n) = Ω(n<sup>c+ε</sup>) plus regularity → Θ(f(n)).</p></details>
+            <details><summary>Analyze Merge Sort with the Master Method.</summary><p>T(n) = 2T(n/2) + Θ(n). Here a = 2, b = 2, log<sub>2</sub> 2 = 1 and f(n) = Θ(n<sup>1</sup>). Case 2 gives Θ(n log n) in best, average and worst cases.</p></details>
+            <details><summary>Why is the regularity condition needed in Case 3?</summary><p>It prevents an irregular or oscillating toll from breaking the geometric-sum argument. Formally a·f(n/b) ≤ c·f(n) for some c &lt; 1. For f(n) = n<sup>p</sup> it reduces to a / b<sup>p</sup> &lt; 1, i.e. p &gt; log<sub>b</sub> a.</p></details>
+            <details><summary>Give a recurrence where the theorem fails.</summary><p>T(n) = T(n/3) + T(2n/3) + n has unequal subproblem sizes; Akra–Bazzi gives Θ(n log n). T(n) = T(n−1) + n is decrease-and-conquer; iteration gives Θ(n²).</p></details>
+            <details><summary>Standard versus generalized Master Theorem?</summary><p>Standard Case 2 needs f(n) = Θ(n<sup>c</sup>) exactly. The generalized form allows f(n) = Θ(n<sup>c</sup> log<sup>k</sup> n), k ≥ 0, giving Θ(n<sup>c</sup> log<sup>k+1</sup> n). Example: T(n) = 4T(n/2) + n² log n is Θ(n² log² n).</p></details>
+          </div>
+
+          <h3>Social post draft</h3>
+          <div class="code-head"><span class="label">Ready to copy</span><button class="copy-btn" data-copy-target="linkedin-post-content">Copy</button></div>
+          <textarea id="linkedin-post-content" rows="9"></textarea>
+        </section>
+      </main>
+
+      <footer>
+        <p>Design and Analysis of Algorithms · SRM University-AP · 2026</p>
+        <p>Group 6 · K. Niharika, N. Likhita, J. Vaishnavi, A. Varshini</p>
+      </footer>
+    </div>
+
+    <script type="module" src="js/master-engine.js"></script>
+    <script type="module" src="js/master-lab.js"></script>
+    <script type="module" src="js/app.js"></script>
+  </body>
+</html>
